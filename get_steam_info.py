@@ -3,8 +3,8 @@ import requests
 
 class Info_handler():
     '''Keep track of a player's information in real time.'''
-    def __init__(self, steam_ID = 'XXXXXXXXXXXXXXX', 
-                 API_key='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'):
+    def __init__(self, steam_ID = '', 
+                 API_key=''):
         
         self.__steam_ID = steam_ID
         self.__API_key = API_key        
