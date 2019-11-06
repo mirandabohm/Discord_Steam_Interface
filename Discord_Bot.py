@@ -1,5 +1,5 @@
 """
-First draft authord on Tues Jan 1 20:14:40 2019
+First draft authored on Tues Jan 1 20:14:40 2019
 Intuitive bot that checks user status across multiple digital platforms. 
 @author: Upquark00
 """
