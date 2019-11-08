@@ -7,6 +7,12 @@ Intuitive bot that checks user status across multiple digital platforms.
 import asyncio
 import discord
 import get_steam_info
+import get_other_program_info
+import nest_asyncio
+
+'''Apply a patch allowing nested use of asyncio.run. 
+Credit: https://github.com/erdewit/nest_asyncio'''
+nest_asyncio.apply()
 
 # # # # # RETRIEVE STEAM INFORMATION # # # # #
 
@@ -27,12 +33,13 @@ BOT_TOKEN = 'bot_token'
 client = discord.Client()
 
 async def change_status_regularly():
-    '''Instigates regular bot status updates, at an interval of 5 seconds.'''
-    while True:
-        await client.change_presence(game=discord.Game(name='Status 1'))
-        await asyncio.sleep(5)
-        await client.change_presence(game=discord.Game(name='Status 2'))
-        await asyncio.sleep(5)
+    '''Updates bot status with active window title at a specified interval.'''
+    while True: 
+        active_window = get_other_program_info.get_active_window()
+        await client.change_presence(game=discord.Game(name=active_window))
+        await asyncio.sleep(2)
+        await client.change_presence(game=discord.Game(name='Something Else'))
+        await asyncio.sleep(2)
         
 @client.event
 async def on_ready():
