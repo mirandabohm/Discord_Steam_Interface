@@ -13,13 +13,20 @@ import get_steam_info
 import get_other_program_info
 from credentials import API_key, steam_ID, BOT_TOKEN
 
-'''Apply a patch allowing nested use of asyncio.run. 
-Credit: https://github.com/erdewit/nest_asyncio'''
+# Apply a patch allowing nested use of asyncio.run. 
+# Credit: https://github.com/erdewit/nest_asyncio'''
 nest_asyncio.apply()
 
+# Bring a Discord bot online using the Discord API.'''
+client = discord.Client()
 
-# # # # # RETRIEVE STEAM INFORMATION # # # # #
 def get_activity():
+    '''Grab info from user's currently active session, and set current activity.
+    
+    If user is currently active on Steam, determine whether user is actively 
+    engaged in a game. If so, set this to current activity. If not, set current
+    activity to title of active OS window.'''
+    
     steam_player = get_steam_info.SteamUser(steam_ID, API_key)
     if steam_player.active_game:
         activity = steam_player.active_game
@@ -27,15 +34,12 @@ def get_activity():
         activity = get_other_program_info.get_active_window()
     return activity
 
-# Bring a Discord bot online using the Discord API.'''
-client = discord.Client()
-
 async def update_status() -> None:
     '''Updates bot status with active window title at a specified interval.'''
     while True: 
         await client.change_presence(game=discord.Game(name=get_activity()))
         await asyncio.sleep(2)
-        await client.change_presence(game=discord.Game(name='Something Else.'))
+        await client.change_presence(game=discord.Game(name='Snarky Comment Here'))
         await asyncio.sleep(2)
         
 @client.event
@@ -50,8 +54,8 @@ async def on_ready() -> None:
     
 @client.event
 async def on_message(message) -> None:
-    # Defines in-server message which triggers bot response. Breaks function 
-    # if message author is bot itself'''
+    '''Defines in-server message which triggers bot response. Breaks function 
+    if message author is bot itself'''
     if message.author == client.user:
         return
 
