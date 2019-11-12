@@ -19,8 +19,8 @@ class SteamUser():
         self.info = self.get_user_info()
         self.active_game = self.get_active_game(self.info) 
         self.name = self.info['personaname']
-        self.status = self.get_player_status(self.info)
-        # profile_url = 'https://steamcommunity.com/profiles/' + steam_ID
+        self.status = self.get_player_discord_status(self.info)
+        self.profile_url = 'https://steamcommunity.com/profiles/' + steam_ID
         
     def get_user_info(self):
         '''Returns a dict containing Steam information for one player using the
@@ -34,10 +34,21 @@ class SteamUser():
             print('Success! API responded to call.')
             self.__player_info = response.json()['response']['players'][0]
         return self.__player_info
-    
-    def get_player_status(self, player_info_dict):
+
+# NOTE: get_player_discord_status translates the Steam status given by the Steam
+# API to a Discord status readable by the Bot. Therefore, that functionality 
+# (currently living within get_steam_info) should be moved to this module. 
+
+# TODO: define a function get_steam_status which takes the player's info dict
+# and returns the steam state for export to get_discord_status. Should this be 
+# returned as steam state or as steam status??
         
-        '''Returns the player's Steam status as a Discord status type.
+    def get_player_discord_status(self, player_info_dict):
+        
+        '''Translates player's Steam status to its corresponding Discord status.
+        
+        Takes Steam user's information as a dictionary, extracts steam status 
+        code (as a number 0 through 6), and returns Discord status as a string.
         
         STEAM STATUS        | STEAM STATE | DISCORD STATUS
         'Offline'           |      0      | 'Offline'

@@ -20,6 +20,13 @@ nest_asyncio.apply()
 # Bring a Discord bot online using the Discord API.'''
 client = discord.Client()
 
+# NOTE: get_player_discord_status translates the Steam status given by the Steam
+# API to a Discord status readable by the Bot. Therefore, that functionality 
+# (currently living within get_steam_info) should be moved to this module. 
+
+# TODO: Create a new function called 'get_discord_status' which takes the steam 
+# player's info dictionaryu and returns a pure Discord status, to be used by the bot. 
+
 def get_activity():
     '''Grab info from user's currently active session, and set current activity.
     
