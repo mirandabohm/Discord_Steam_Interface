@@ -9,8 +9,8 @@ import asyncio
 import discord
 import nest_asyncio
 
-import get_steam_info
 import get_other_program_info
+from get_steam_info import steam_player
 from credentials import BOT_TOKEN
 
 # Apply a patch allowing nested use of asyncio.run. 
@@ -20,49 +20,56 @@ nest_asyncio.apply()
 # Bring a Discord bot online using the Discord API.'''
 client = discord.Client()
 
-# TODO: As the get_steam_info module has a class which builds a SteamUser, this
-# module would benefit from a class called DiscordUser which builds user sessions
-# and stores pertinent Discord-side information. 
+# TODO: add tests and consistent function annotations 
 
-def get_activity(player):
-    '''Grab info from user's currently active session, and set current activity.
+class DiscordUser():
+    '''Stores pertinent Discord-side information for a user. Will run a bot, later.''' 
     
-    If user is currently active on Steam, determine whether user is actively 
-    engaged in a game. If so, set this to current activity. If not, set current
-    activity to title of active OS window.'''
+    def __init__(self):
+        self.activity = self.get_activity(steam_player)
+        self.discord_status = self.get_player_discord_status(steam_player.get_steam_state(steam_player.info))
+        
+    def get_activity(self,player):
+        '''Grab info from user's currently active session, and set current activity.
+        
+        If user is currently active on Steam, determine whether user is actively 
+        engaged in a game. If so, set this to current activity. If not, set current
+        activity to title of active OS window.'''
+        
+        # player = get_steam_info.SteamUser(steam_ID, API_key)
+        if player.active_game:
+            activity = player.active_game
+        else:
+            activity = get_other_program_info.get_active_window()
+        return activity
     
-    # player = get_steam_info.SteamUser(steam_ID, API_key)
-    if player.active_game:
-        activity = player.active_game
-    else:
-        activity = get_other_program_info.get_active_window()
-    return activity
+    def get_player_discord_status(self, steam_state):
+        
+        '''Translates player's Steam status to its corresponding Discord status.
+        
+        Does this by accepting Steam state as a value between 0 and 6, and finding
+        its corresponding Discord status according to this table:
+        
+        STEAM STATUS        | STEAM STATE | DISCORD STATUS
+        'Offline'           |      0      | 'Offline'
+        'Online'            |      1      | 'Online'
+        'Busy'              |      2      | 'dnd'
+        'Away'              |      3      | 'Idle'
+        'Snooze'            |      4      | 'Idle'
+        'Looking to trade'  |      5      | 'Online'
+        'Looking to play'   |      6      | 'Online'
+        
+        '''
+        possible_discord_statuses = {0: 'offline', 1: 'online', 3: 'dnd', 4: 'idle', 5: 'idle', 6: 'online', 7: 'online'}
+        discord_status = possible_discord_statuses[steam_state]
+        return discord_status
 
-def get_player_discord_status(steam_state):
-    
-    '''Translates player's Steam status to its corresponding Discord status.
-    
-    Does this by accepting Steam state as a value between 0 and 6, and finding
-    its corresponding Discord status according to this table:
-    
-    STEAM STATUS        | STEAM STATE | DISCORD STATUS
-    'Offline'           |      0      | 'Offline'
-    'Online'            |      1      | 'Online'
-    'Busy'              |      2      | 'dnd'
-    'Away'              |      3      | 'Idle'
-    'Snooze'            |      4      | 'Idle'
-    'Looking to trade'  |      5      | 'Online'
-    'Looking to play'   |      6      | 'Online'
-    
-    '''
-    possible_discord_statuses = {0: 'offline', 1: 'online', 3: 'dnd', 4: 'idle', 5: 'idle', 6: 'online', 7: 'online'}
-    discord_status = possible_discord_statuses[steam_state]
-    return discord_status
+D = DiscordUser()
 
 async def update_status() -> None:
     '''Updates bot status with active window title at a specified interval.'''
     while True: 
-        await client.change_presence(game=discord.Game(name=get_activity(get_steam_info.steam_player)), status=discord.Status('dnd'))
+        await client.change_presence(game=discord.Game(name=D.get_activity(steam_player)), status=discord.Status('idle'))
         await asyncio.sleep(2)
         await client.change_presence(game=discord.Game(name='Snarky Comment Here'), status=discord.Status('dnd'))
         await asyncio.sleep(2)
@@ -88,7 +95,7 @@ async def on_message(message) -> None:
         msg = 'Hello {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
 
-client.run(BOT_TOKEN)
+#client.run(BOT_TOKEN)
 
 
 
