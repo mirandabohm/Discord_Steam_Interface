@@ -20,7 +20,7 @@ nest_asyncio.apply()
 # Bring a Discord bot online using the Discord API.'''
 client = discord.Client()
 
-# TODO: add tests and consistent function annotations 
+# TODO: add tests
 
 class DiscordUser():
     '''Stores pertinent Discord-side information for a user. Will run a bot, later.''' 
@@ -29,21 +29,20 @@ class DiscordUser():
         self.activity = self.get_activity(steam_player)
         self.discord_status = self.get_player_discord_status(steam_player.get_steam_state(steam_player.info))
         
-    def get_activity(self,player):
+    def get_activity(self, player: object) -> str:
         '''Grab info from user's currently active session, and set current activity.
         
         If user is currently active on Steam, determine whether user is actively 
         engaged in a game. If so, set this to current activity. If not, set current
         activity to title of active OS window.'''
         
-        # player = get_steam_info.SteamUser(steam_ID, API_key)
         if player.active_game:
             activity = player.active_game
         else:
             activity = get_other_program_info.get_active_window()
         return activity
     
-    def get_player_discord_status(self, steam_state):
+    def get_player_discord_status(self, steam_state: int) -> str:
         
         '''Translates player's Steam status to its corresponding Discord status.
         
@@ -85,7 +84,7 @@ async def on_ready() -> None:
     print('------')
     
 @client.event
-async def on_message(message) -> None:
+async def on_message(message: object) -> None:
     '''Defines in-server message which triggers bot response. Breaks function 
     if message author is bot itself'''
     if message.author == client.user:
@@ -95,7 +94,7 @@ async def on_message(message) -> None:
         msg = 'Hello {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
 
-#client.run(BOT_TOKEN)
+client.run(BOT_TOKEN)
 
 
 
