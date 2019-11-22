@@ -1,4 +1,4 @@
-# Discord_Steam_Interface
+# A Steam-Interfacing Discord Bot built for Python
 
 This project creates bot intended to discover and displaz a Discord user's 
 current activity by
@@ -21,11 +21,25 @@ Status will be translated as follows:
 active window will be returned instead. 
 
 ### Requirements
- 
-	(1) a Steam ID, obtainable via the Steam client under View > Settings. 
+    
+    (0) A system which runs Python
 	
-	(2) a Steam API Key, which can be found here: 
+	(1) Discord.py (see below)
+    
+	(2) a Steam ID, obtainable via the Steam client under View > Settings. 
+	
+	(3) a Steam API Key, which can be found here: 
     	https://steamcommunity.com/dev/apikey
     	
-	(3) a Discord bot token, which can be created in the Discord Developer portal: 
+	(4) a Discord bot token, which can be created in the Discord Developer portal: 
     	https://discordapp.com/developers/applications/
+		
+### Check Dependencies 
+
+To check for Python on your system, enter `python --version` into the command line. 
+A response such as `Python 2.7.16` indicates proper installaiton. A result such as 
+`'python' is not recognized as an internal or external command, operable program, or batch file'` 
+implies the need for installation or re-installlation. 
+
+To install the Discord.py library, enter the following: 
+`py -3 -m pip install -U discord.py`
