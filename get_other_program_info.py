@@ -11,3 +11,4 @@ def get_active_window():
     active_window = win32gui.GetWindowText(win32gui.GetForegroundWindow())
     return active_window
 
+
