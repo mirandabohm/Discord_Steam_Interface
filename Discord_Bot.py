@@ -50,13 +50,13 @@ class DiscordUser():
         its corresponding Discord status according to this table:
         
         STEAM STATUS        | STEAM STATE | DISCORD STATUS
-        'Offline'           |      0      | 'Offline'
-        'Online'            |      1      | 'Online'
+        'Offline'           |      0      | 'offline'
+        'Online'            |      1      | 'online'
         'Busy'              |      2      | 'dnd'
-        'Away'              |      3      | 'Idle'
-        'Snooze'            |      4      | 'Idle'
-        'Looking to trade'  |      5      | 'Online'
-        'Looking to play'   |      6      | 'Online'
+        'Away'              |      3      | 'idle'
+        'Snooze'            |      4      | 'idle'
+        'Looking to trade'  |      5      | 'online'
+        'Looking to play'   |      6      | 'online'
         
         '''
         possible_discord_statuses = {0: 'offline', 1: 'online', 3: 'dnd', 4: 'idle', 5: 'idle', 6: 'online', 7: 'online'}
@@ -68,9 +68,9 @@ D = DiscordUser()
 async def update_status() -> None:
     '''Updates bot status with active window title at a specified interval.'''
     while True: 
-        await client.change_presence(game=discord.Game(name=D.get_activity(steam_player)), status=discord.Status('idle'))
+        await client.change_presence(game=discord.Game(name=D.get_activity(steam_player)), status=discord.Status('online'))
         await asyncio.sleep(2)
-        await client.change_presence(game=discord.Game(name='Snarky Comment Here'), status=discord.Status('dnd'))
+        await client.change_presence(game=discord.Game(name='Spyder (Python 3.6)'), status=discord.Status('dnd'))
         await asyncio.sleep(2)
         
 @client.event
