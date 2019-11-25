@@ -20,10 +20,10 @@ active window will be returned instead.
 
 ### Preview ###
 Example display for active Steam session, with game underway. 
-  ![Example Usage](example_usage2.png)
+  ![Example Usage](example_usage1.png)
 
 Example display for active session in a program outside of Steam.  
-  ![Example Usage](example_usage1.png)
+  ![Example Usage](example_usage2.png)
 
 ### Requirements ###
     

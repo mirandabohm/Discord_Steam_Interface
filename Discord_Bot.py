@@ -27,7 +27,7 @@ class DiscordUser():
     
     def __init__(self):
         self.activity = self.get_activity(steam_player)
-        self.discord_status = self.get_player_discord_status(steam_player.get_steam_state(steam_player.info))
+        self.discord_status = self.steam_to_discord_status(steam_player.get_steam_state(steam_player.info))
         
     def get_activity(self, player: object) -> str:
         '''Grab info from user's currently active session, and set current activity.
@@ -42,7 +42,11 @@ class DiscordUser():
             activity = get_other_program_info.get_active_window()
         return activity
     
-    def get_player_discord_status(self, steam_state: int) -> str:
+    ### TODO: add function called 'establish_status' which considers all 
+    ### activity. If playing a Steam game, for example, set Discord status to 
+    ### Steam status by calling steam_to_discord_status. If not, presume busy / away. 
+    
+    def steam_to_discord_status(self, steam_state: int) -> str:
         
         '''Translates player's Steam status to its corresponding Discord status.
         
@@ -68,9 +72,9 @@ D = DiscordUser()
 async def update_status() -> None:
     '''Updates bot status with active window title at a specified interval.'''
     while True: 
-        await client.change_presence(game=discord.Game(name=D.get_activity(steam_player)), status=discord.Status('online'))
+        await client.change_presence(game=discord.Game(name=D.activity, status=D.discord_status))
         await asyncio.sleep(2)
-        await client.change_presence(game=discord.Game(name='Spyder (Python 3.6)'), status=discord.Status('dnd'))
+        await client.change_presence(game=discord.Game(name='Static Alternate Status'), status=discord.Status('dnd'))
         await asyncio.sleep(2)
         
 @client.event
