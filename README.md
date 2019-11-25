@@ -1,28 +1,29 @@
 # A Steam-Interfacing Discord Bot built in Python #
-
-This is the Python version of the Discord Bot found here:  
-[Discord_Steam_Interface Bot (Node.js edition)](https://github.com/upquark00/Discord_Steam_Interface)
-
 This project creates a bot intended to discover and display a Discord user's 
-current activity by
-
-(a) Checking for an active session in Steam, a major gaming platform, and importing 
-details about the user's active game, if applicable. 
-
-Status will be translated as follows: 
+current activity. It first checks for an active session in Steam, a major gaming platform. If an active
+session is found, the name of the active game will be displayed as the bot's status. Additionally, the
+player's status on Discord will be updated to match their status on Steam, in accordance with the table below:
 
 | STEAM STATUS | STEAM STATE | DISCORD STATUS |
    |-----------|:-----------:|-----------:| 
-   'Offline'           |      0      | 'Offline'
-   'Online'            |      1      | 'Online'
+   'Offline'           |      0      | 'offline'
+   'Online'            |      1      | 'online'
    'Busy'              |      2      | 'dnd'
-   'Away'              |      3      | 'Idle'
-   'Snooze'            |      4      | 'Idle'
-   'Looking to trade'  |      5      | 'Online'
-   'Looking to play'   |      6      | 'Online'
+   'Away'              |      3      | 'idle'
+   'Snooze'            |      4      | 'idle'
+   'Looking to trade'  |      5      | 'online'
+   'Looking to play'   |      6      | 'online'
 
-(b) If no active Steam session is found, information about the user's currently 
+ 
+If no active Steam session is found, information about the user's currently 
 active window will be returned instead. 
+
+### Preview ###
+Example display for active Steam session, with game underway. 
+  ![Example Usage](example_usage2.png)
+
+Example display for active session in a program outside of Steam.  
+  ![Example Usage](example_usage1.png)
 
 ### Requirements ###
     
@@ -60,5 +61,3 @@ implies the need for installation or re-installlation.
 
 To install the Discord.py library, enter the following: 
 `py -3 -m pip install -U discord.py`
-
-### Usage ### 
